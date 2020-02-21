@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+
 import { fetchStreams } from "../../Actions"
 
 class StreamList extends React.Component {
@@ -12,8 +13,8 @@ class StreamList extends React.Component {
         if (this.props.isSignedIn && stream.userId === this.props.currentUserId) {
             return (
                 <div className="right floated button">
-                    <Link to={"/streams/edit/" + stream.id} className="ui button primary">EDIT</Link>
-                    <Link to={"/streams/delete/" + stream.id} className="ui button negative">DELETE</Link>
+                    <Link to={"/edit/" + stream.id} className="ui button primary">EDIT</Link>
+                    <Link to={"/delete/" + stream.id} className="ui button negative">DELETE</Link>
                 </div>
             );
         }
@@ -25,7 +26,7 @@ class StreamList extends React.Component {
                 {this.renderAdmin(stream)}
                 <i className="large middle aligned icon camera" />
                 <div className="content">
-                    <Link to={"/streams/" + stream.id} className="header">
+                    <Link to={"/" + stream.id} className="header">
                         {stream.title}
                     </Link>
                     <div className="description">
@@ -40,7 +41,7 @@ class StreamList extends React.Component {
         if (this.props.isSignedIn) {
             return (
                 <div style={{ textAlign: "right" }}>
-                    <Link to="/streams/new" className="ui button primary">
+                    <Link to="/new" className="ui button primary">
                         Create Stream
                     </Link>
                 </div>

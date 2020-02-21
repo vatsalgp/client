@@ -12,15 +12,24 @@ class StreamDelete extends React.Component {
         this.props.fetchStream(this.props.match.params.id);
     }
 
+    renderDelete() {
+        return (
+            <button
+                className="ui button negative"
+                onClick={() => this.props.deleteStream(this.props.match.params.id)}//
+            >Delete</button>
+        );
+    }
+
+    renderCancel() {
+        return <Link to="/" className="ui button">Cancel</Link>;
+    }
+
     renderActions() {
         return (
             <div>
-                <button
-                    className="ui button negative"
-                    onClick={() => this.props.deleteStream(this.props.match.params.id)}//
-                >Delete</button>
-
-                <Link to="/" className="ui button">Cancel</Link>
+                {this.renderDelete()}
+                {this.renderCancel()}
             </div>
         );
     }
@@ -36,7 +45,7 @@ class StreamDelete extends React.Component {
     render() {
         if (!this.props.stream) {
             return <div>Loading...</div>;
-        } else {
+        } else if (this.props.isSignedIn && this.props.stream.userId === this.props.currentUserId) {
             return (
                 < Modal
                     title="Delete Stream"
@@ -45,12 +54,25 @@ class StreamDelete extends React.Component {
                     onDismiss={() => history.push("/")}
                 />
             );
+        } else {
+            return (
+                < Modal
+                    title="Delete Stream"
+                    content={"You don't have access to delete this Stream"}
+                    actions={this.renderCancel()}
+                    onDismiss={() => history.push("/")}
+                />
+            );
         }
     }
 }
 
 const mapStateToProps = (state, ownProps) => {
-    return { stream: state.streams[ownProps.match.params.id] };
+    return {
+        stream: state.streams[ownProps.match.params.id],
+        currentUserId: state.auth.userId,
+        isSignedIn: state.auth.isSignedIn
+    };
 }
 
 export default connect(mapStateToProps, { fetchStream, deleteStream })(StreamDelete);

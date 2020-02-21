@@ -1,12 +1,12 @@
 import React from "react";
 import flv from "flv.js";
 import { connect } from "react-redux";
+
 import { fetchStream } from "../../Actions";
 
 class StreamShow extends React.Component {
 
-    constructor(props) {
-        super(props);
+    componentWillMount() {
         this.videoRef = React.createRef();
     }
 
@@ -37,7 +37,6 @@ class StreamShow extends React.Component {
     render() {
 
         const { stream } = this.props;
-
         if (!stream) {
             return <div>Loading...</div>
         } else {
