@@ -6,15 +6,13 @@ const INITIAL_STATE = {
     userId: null
 };
 
-const omit = (obj, prop) => {
-    const output = {};
-    for (const key in obj) {
-        if (key != prop) {
-            output[key] = obj[key];
-        }
+const mapKeys = arr => {
+    const op = {};
+    for (const e of arr) {
+        op[e.id] = e;
     }
-    return output;
-}
+    return op;
+};
 
 const authReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
@@ -29,15 +27,15 @@ const authReducer = (state = INITIAL_STATE, action) => {
 
 const streamReducer = (state = {}, action) => {
     switch (action.type) {
-        case "CREATE_STREAM":
-            return { ...state };
         case "FETCH_STREAM":
+        case "CREATE_STREAM":
         case "EDIT_STREAM":
-            return { ...state, [action.payload.id]: action.payload.stream };
+            return { ...state, [action.payload.id]: action.payload };
         case "DELETE_STREAM":
-            return omit(state, action.payload)
+            delete state[action.payload];
+            return { ...state };
         case "FETCH_STREAMS":
-            return { ...state, ...action.payload };
+            return { ...state, ...mapKeys(action.payload) };
         default:
             return state;
     }
